@@ -56,6 +56,7 @@ input.onButtonPressed(Button.B, function () {
     Kitronik_Robotics_Board.allOff()
 })
 radio.onReceivedValue(function (name, value) {
+    serial.writeValue("a." + name, value)
     if (randint(0, 10) < 1) {
         led.toggle(0, 0)
     }
@@ -128,7 +129,11 @@ let servoRight = 90
 let servoGrip = 135
 smoothFactor = 0.5
 basic.forever(function () {
-	
+    if (Math.abs(speedBase) < 5 && Math.abs(speedGrip) < 5 && Math.abs(speedLeft) < 5 && Math.abs(speedRight) < 0) {
+        isCraneIdle = true
+    } else {
+        isCraneIdle = false
+    }
 })
 basic.forever(function () {
     if (!(isCraneIdle)) {
@@ -144,5 +149,9 @@ basic.forever(function () {
         Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo7, servoLeft)
         Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo8, servoRight)
         Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo5, servoGrip)
+        servoBase_target = servoBase_target - speedBase
+        servoLeft_target = servoLeft_target + speedLeft
+        servoRight_target = servoRight_target + speedRight
+        servoGrip_target = servoGrip_target + speedGrip
     }
 })
