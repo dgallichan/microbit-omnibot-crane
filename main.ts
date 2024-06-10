@@ -56,6 +56,9 @@ input.onButtonPressed(Button.B, function () {
     Kitronik_Robotics_Board.allOff()
 })
 radio.onReceivedValue(function (name, value) {
+    if (randint(0, 10) < 1) {
+        led.toggle(0, 0)
+    }
     thisValue = Math.constrain(value, -100, 100)
     if (name == "M1") {
         if (thisValue > 0) {
